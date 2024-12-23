@@ -77,9 +77,9 @@ def check_if_done():
 def create_policy_network(sequence_length, input_size, num_actions):
     ####################################################################################################################
     inputs = Input(shape=(sequence_length, input_size))    
-    x = Conv1D(filters=1000, kernel_size=3, activation='tanh', padding='same')(inputs)    
-    x = LSTM(1000, return_sequences=False)(x)    
-    dense = Dense(32, activation='tanh')(x)    
+    x = Conv1D(filters=512, kernel_size=3, activation='tanh', padding='same')(inputs)    
+    x = LSTM(512, return_sequences=False)(x)    
+    dense = Dense(64, activation='tanh')(x)    
     action_probs = Dense(num_actions, activation='softmax', name="action_probs")(dense)
     value = Dense(1, name="value")(dense)
     ####################################################################################################################
@@ -200,10 +200,10 @@ class PPOAgent:
 
 #%% Train
 env = StockTradingEnv()
-agent = PPOAgent(sequence_length=1, input_size=20, num_actions=3, learning_rate=0.0003, gamma=0.99, clip_ratio=0.3)
+agent = PPOAgent(sequence_length=1, input_size=20, num_actions=3, learning_rate=0.0003, gamma=0.90, clip_ratio=0.75)
 
 num_episodes = 1000000
-batch_size = 64
+batch_size = 128
 best_reward = 0
 global current_index
 current_index = 0
